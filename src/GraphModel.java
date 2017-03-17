@@ -3,13 +3,18 @@
    Version 1.0
 */
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 public class GraphModel
 {
 	static Vertex<String> ST1,ST2,C1,C2,C3,C4,E1,E2,E3,E4,S1,S2,S3,S4,S5 ;
 	static List<Vertex<String>> verticies = new ArrayList<Vertex<String>>();
 	static List<Vertex<String>> bfsVertices ;
 	static List<Vertex<String>> dfsVertices ;
+	static Map<String,Integer> bellmanFordResult = new HashMap<String,Integer>();
+	static Map<String,Integer> djikstraResult = new HashMap<String,Integer>();
+	static int[][] floydWarshallResult ;
 	
 	public static void main(String[] a)
 	{
@@ -69,19 +74,19 @@ public class GraphModel
 	 
 	  //adding edges between vertices
 	  
-	  graph.addEdge(ST1, C1,0,"PRO");
-	  graph.addEdge(C1, E1,0,"PRO");
-	  graph.addEdge(E1,S1,0,"PRO");
-	  graph.addEdge(C1, E2,0,"PRO");
-	  graph.addEdge(E2,S2,0,"PRO");
-	  graph.addEdge(ST1, C2,0,"PRO");
-	  graph.addEdge(C2, E3,0,"PRO");
-	  graph.addEdge(E3,S3,0,"PRO");
-	  graph.addEdge(ST2, C3,0,"PRO");
-	  graph.addEdge(C3, E4,0,"PRO");
-	  graph.addEdge(E4,S4,0,"PRO");
-	  graph.addEdge(ST2, C4,0,"PRO");
-	  graph.addEdge(C4,S5,0,"PRO");
+	  graph.addEdge(ST1, C1,2,"PRO");
+	  graph.addEdge(C1, E1,1,"PRO");
+	  graph.addEdge(E1,S1,3,"PRO");
+	  graph.addEdge(C1, E2,1,"PRO");
+	  graph.addEdge(E2,S2,3,"PRO");
+	  graph.addEdge(ST1, C2,2,"PRO");
+	  graph.addEdge(C2, E3,1,"PRO");
+	  graph.addEdge(E3,S3,3,"PRO");
+	  graph.addEdge(ST2, C3,2,"PRO");
+	  graph.addEdge(C3, E4,1,"PRO");
+	  graph.addEdge(E4,S4,3,"PRO");
+	  graph.addEdge(ST2, C4,2,"PRO");
+	  graph.addEdge(C4,S5,5,"PRO");
 	  
       //displaying vertices in graph
 	  
@@ -181,6 +186,56 @@ public class GraphModel
 	  
 	  System.out.println("---------------------------------------------");
 	  
+	  bellmanFordResult = graph.BellmanFord(graph, 0);
+	  System.out.println("Bellman ford from Stance1:");
+	  System.out.println(bellmanFordResult);
+	  
+	  System.out.println("---------------------------------------------");
+	  
+	  bellmanFordResult = graph.BellmanFord(graph, 1);
+	  System.out.println("Bellman ford from Stance2:");
+	  System.out.println(bellmanFordResult);
+	  
+	  System.out.println("---------------------------------------------");
+	  
+	  bellmanFordResult = graph.BellmanFord(graph, 3);
+	  System.out.println("Bellman ford from Claim2:");
+	  System.out.println(bellmanFordResult);
+	  
+	  System.out.println("---------------------------------------------");
+	  
+	  djikstraResult = graph.BellmanFord(graph, 0);
+	  System.out.println("Djikstra from Stance1:");
+	  System.out.println(djikstraResult);
+	  
+	  System.out.println("---------------------------------------------");
+	  
+	  djikstraResult = graph.BellmanFord(graph, 1);
+	  System.out.println("Djikstra from Stance2:");
+	  System.out.println(djikstraResult);
+	  
+	  System.out.println("---------------------------------------------");
+	  
+	  djikstraResult = graph.BellmanFord(graph, 3);
+	  System.out.println("Djikstra from Claim2:");
+	  System.out.println(djikstraResult);
+	  
+	  System.out.println("---------------------------------------------");
+	  
+	  floydWarshallResult = new int[graph.verticessize()][graph.verticessize()];
+	  floydWarshallResult = graph.floydWarshall(graph);
+	  System.out.println("Floyd Warshalls Algorithm:");
+	  for (int i=0; i<graph.verticessize(); ++i)
+      {
+		  System.out.print(graph.verticies.get(i).name +":\t");
+          for (int j=0; j<graph.verticessize(); ++j)
+          {
+                  System.out.print(floydWarshallResult[i][j]+"\t");
+          }
+          System.out.println();
+      }
+	  
+	  System.out.println("---------------------------------------------");
 	  
 	}
 }

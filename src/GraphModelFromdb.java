@@ -1,8 +1,10 @@
 //Import required packages
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class GraphModelFromdb {
    // JDBC driver name and database URL
@@ -28,6 +30,16 @@ public class GraphModelFromdb {
    static List<Vertex<String>> bfsVertices ;
    
    static List<Vertex<String>> dfsVertices ;
+   
+   static int bellmanFordSource ;
+   
+   static Map<String,Integer> bellmanFordResult ;
+   
+   static int djikstraSource ;
+   
+   static Map<String,Integer> djikstraResult ;
+   
+   static int[][] floydWarshallResult ;
    
    public static void main(String[] args) {
    Connection conn = null;
@@ -147,11 +159,22 @@ public class GraphModelFromdb {
 	        		 }
 	        		 dfsVertices.clear();
 	        		 System.out.println("---------------------------------------------");
+	        		 System.out.println("Bellman ford from:"+stance);
+	        		 bellmanFordSource = graph.getVertices().indexOf(temp);
+	        		 bellmanFordResult = graph.BellmanFord(graph, bellmanFordSource);
+	        		 System.out.println(bellmanFordResult);
+	        		 System.out.println("---------------------------------------------");
+	        		 System.out.println("Djikstra from:"+stance);
+	        		 djikstraSource = graph.getVertices().indexOf(temp);
+	        		 djikstraResult = graph.djikstra(graph,djikstraSource);
+	        		 System.out.println(djikstraResult);
+	        		 System.out.println("---------------------------------------------");
 	        	 }
 	         }
 	  }
 	  
 	  rs3.close();
+	  
 	  	  
 	  //To form subgraph for yes stance
 	  sql4 = "SELECT vertex_id FROM vertex where vertex_related_stance = 'Yes'" ;
@@ -187,8 +210,6 @@ public class GraphModelFromdb {
 	  
 	  System.out.println("---------------------------------------------");
 	  
-	  rs4.close();
-	  
 	  //To form subgraph for No stance
 	  sql5 = "SELECT vertex_id FROM vertex where vertex_related_stance = 'No' ";
 	  ResultSet rs5 = stmt5.executeQuery(sql5);
@@ -223,8 +244,25 @@ public class GraphModelFromdb {
 	  System.out.println(subgraph.getEdges());
 	  
 	  System.out.println("---------------------------------------------");
-
+	  
+	  
+	  rs4.close();
 	  rs5.close();
+	  
+	  floydWarshallResult = new int[graph.verticessize()][graph.verticessize()];
+	  floydWarshallResult = graph.floydWarshall(graph);
+	  System.out.println("Floyd Warshalls Algorithm:");
+	  for (int i=0; i<graph.verticessize(); ++i)
+      {
+		  System.out.print(graph.verticies.get(i).name +":\t");
+          for (int j=0; j<graph.verticessize(); ++j)
+          {
+                  System.out.print(floydWarshallResult[i][j]+"\t");
+          }
+          System.out.println();
+      }
+	  
+	  System.out.println("---------------------------------------------");
 	  
       //STEP 7: Clean-up environment
 	  
